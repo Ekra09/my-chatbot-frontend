@@ -1,4 +1,5 @@
-const rasaURL = `${process.env.REACT_APP_RASA_BACKEND_URL}/webhooks/rest/webhook`;
+const rasaURL = "https://6e6f-103-125-177-124.ngrok-free.app/webhooks/rest/webhook";
+
 
 
 async function sendMessage(message) {
