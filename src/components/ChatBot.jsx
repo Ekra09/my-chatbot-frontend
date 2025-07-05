@@ -10,8 +10,10 @@ const ChatBot = () => {
     const userMessage = { sender: 'user', text: input };
     setMessages([...messages, userMessage]);
 
+    const rasaURL = process.env.REACT_APP_RASA_URL || 'http://localhost:5005/webhooks/rest/webhook';
+
     try {
-      const res = await axios.post('http://localhost:5005/webhooks/rest/webhook', {
+      const res = await axios.post(rasaURL, {
         sender: 'ekra_user',
         message: input,
       });
@@ -19,7 +21,9 @@ const ChatBot = () => {
       setMessages((prev) => [...prev, ...botResponses]);
     } catch (err) {
       console.error(err);
+      setMessages((prev) => [...prev, { sender: 'bot', text: 'Sorry, I couldn’t reach the server.' }]);
     }
+
     setInput('');
   };
 
@@ -30,7 +34,11 @@ const ChatBot = () => {
         <div className="h-64 overflow-y-auto mb-4 border rounded-lg p-4 text-left bg-gray-100">
           {messages.map((msg, i) => (
             <div key={i} className={msg.sender === 'user' ? 'text-right' : 'text-left'}>
-              <span className={`inline-block p-2 my-1 rounded-lg ${msg.sender === 'user' ? 'bg-blue-200' : 'bg-green-200'}`}>
+              <span
+                className={`inline-block p-2 my-1 rounded-lg ${
+                  msg.sender === 'user' ? 'bg-blue-200' : 'bg-green-200'
+                }`}
+              >
                 {msg.text}
               </span>
             </div>
